@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ServiceDesk Service Swagger</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/swagger-ui-dist@3.12.1/swagger-ui.css"
+    />
+  </head>
+  <body>
+    <div id="swagger-ui"></div>
+
+    <script src="/swagger-ui-dist@3.12.1/swagger-ui-standalone-preset.js"></script>
+    <script src="/swagger-ui-dist@3.12.1/swagger-ui-bundle.js"></script>
+
+    <script>
+      window.onload = function() {
+        // Build a system
+        const ui = SwaggerUIBundle({
+          url: "/swagger.json",
+          //   url: "/json/apidocs.swagger.json",
+          dom_id: "#swagger-ui",
+          deepLinking: true,
+          presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+          plugins: [SwaggerUIBundle.plugins.DownloadUrl],
+          layout: "StandaloneLayout"
+        });
+        window.ui = ui;
+      };
+    </script>
+  </body>
+</html>
