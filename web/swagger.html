@@ -3,7 +3,7 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>ServiceDesk Service Swagger</title>
+    <title>GoSwagger</title>
     <link
       rel="stylesheet"
       type="text/css"
@@ -20,8 +20,7 @@
       window.onload = function() {
         // Build a system
         const ui = SwaggerUIBundle({
-          url: "/swagger.json",
-          //   url: "/json/apidocs.swagger.json",
+          url: "__swaggerUrl__",
           dom_id: "#swagger-ui",
           deepLinking: true,
           presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],

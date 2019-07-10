@@ -8,8 +8,10 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gobuffalo/packr"
@@ -26,9 +28,18 @@ func getAvailablePort() int {
 
 func startServer(jsonPath string, port int) {
 	box := packr.NewBox("../web")
-	http.Handle("/", http.FileServer(box))
+	jsonName := filepath.Base(jsonPath)
 
-	http.HandleFunc("/swagger.json", func(w http.ResponseWriter, req *http.Request) {
+	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
+		if req.URL.Path == "/" {
+			html, _ := box.FindString("swagger.html")
+			fmt.Fprint(w, strings.ReplaceAll(html, "__swaggerUrl__", "/"+jsonName))
+		} else {
+			http.FileServer(box).ServeHTTP(w, req)
+		}
+	})
+
+	http.HandleFunc("/"+jsonName, func(w http.ResponseWriter, req *http.Request) {
 		fh, err := os.Open(jsonPath)
 		if err != nil {
 			log.Fatal(err)
@@ -44,7 +55,7 @@ func startServer(jsonPath string, port int) {
 		timer := time.NewTimer(time.Second)
 		go func() {
 			<-timer.C
-			url := "http://127.0.0.1:" + strconv.Itoa(port) + "/swagger.html"
+			url := "http://127.0.0.1:" + strconv.Itoa(port) + "/"
 			log.Println("URL: " + url)
 			openBrowser(url)
 		}()
