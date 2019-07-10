@@ -1,6 +1,6 @@
 ## goswagger
 
-One command to view Swagger API document, according to the Swagger json configuration.
+One command to view beautiful documentation from a Swagger-compliant API.
 
 #### Install:
 
@@ -14,7 +14,7 @@ Make sure that GOBIN environment variable is set, and it is included in PATH env
 #### Usage:
 
 ```bash
-goswagger /swgger/json/path
+goswagger your/swgger/json/path [port]
 
 # example
 goswagger api-examples/pet-store.json

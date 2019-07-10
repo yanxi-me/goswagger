@@ -24,7 +24,7 @@ func getAvailablePort() int {
 	return listener.Addr().(*net.TCPAddr).Port
 }
 
-func startServer(jsonPath string) {
+func startServer(jsonPath string, port int) {
 	box := packr.NewBox("../web")
 	http.Handle("/", http.FileServer(box))
 
@@ -40,7 +40,7 @@ func startServer(jsonPath string) {
 		}
 	})
 
-	for port := 18000; ; port++ {
+	for ; ; port++ {
 		timer := time.NewTimer(time.Second)
 		go func() {
 			<-timer.C
@@ -77,8 +77,8 @@ func openBrowser(url string) {
 }
 
 func main() {
-	if len(os.Args) != 2 {
-		fmt.Println("Usage: goswagger /swagger/json/path")
+	if len(os.Args) < 2 || len(os.Args) > 3 {
+		fmt.Println("Usage: goswagger your/swagger/json/path [port]")
 		return
 	}
 
@@ -88,5 +88,14 @@ func main() {
 		return
 	}
 
-	startServer(jsonPath)
+	port := 18000 // default port
+	if len(os.Args) == 3 {
+		var err error
+		if port, err = strconv.Atoi(os.Args[2]); err != nil {
+			fmt.Println("port must be a number")
+			return
+		}
+	}
+
+	startServer(jsonPath, port)
 }
